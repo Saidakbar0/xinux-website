@@ -1,0 +1,538 @@
+1:"$Sreact.fragment"
+2:I[3249,["/xinux-website/_next/static/chunks/e95bade96f22dd3f.js","/xinux-website/_next/static/chunks/2bbe6c930c511e33.js","/xinux-website/_next/static/chunks/07ff87809f71ceab.js","/xinux-website/_next/static/chunks/db8daa6ce7c892c3.js","/xinux-website/_next/static/chunks/851ed4b96294a79c.js"],"TOCProvider"]
+3:I[50723,["/xinux-website/_next/static/chunks/e95bade96f22dd3f.js","/xinux-website/_next/static/chunks/2bbe6c930c511e33.js","/xinux-website/_next/static/chunks/07ff87809f71ceab.js","/xinux-website/_next/static/chunks/db8daa6ce7c892c3.js","/xinux-website/_next/static/chunks/851ed4b96294a79c.js"],"Sidebar"]
+4:I[93251,["/xinux-website/_next/static/chunks/e95bade96f22dd3f.js","/xinux-website/_next/static/chunks/2bbe6c930c511e33.js","/xinux-website/_next/static/chunks/07ff87809f71ceab.js","/xinux-website/_next/static/chunks/db8daa6ce7c892c3.js","/xinux-website/_next/static/chunks/851ed4b96294a79c.js"],"ClientWrapper"]
+9:I[1955,["/xinux-website/_next/static/chunks/e95bade96f22dd3f.js","/xinux-website/_next/static/chunks/2bbe6c930c511e33.js","/xinux-website/_next/static/chunks/07ff87809f71ceab.js","/xinux-website/_next/static/chunks/db8daa6ce7c892c3.js","/xinux-website/_next/static/chunks/851ed4b96294a79c.js"],"ToggleWordWrapButton"]
+bf:I[35417,["/xinux-website/_next/static/chunks/26ca110782d86623.js","/xinux-website/_next/static/chunks/81f0f13d25d49d65.js"],"OutletBoundary"]
+c0:"$Sreact.suspense"
+e5:I[74263,["/xinux-website/_next/static/chunks/e95bade96f22dd3f.js","/xinux-website/_next/static/chunks/2bbe6c930c511e33.js","/xinux-website/_next/static/chunks/07ff87809f71ceab.js","/xinux-website/_next/static/chunks/db8daa6ce7c892c3.js","/xinux-website/_next/static/chunks/851ed4b96294a79c.js"],"HeadingAnchor"]
+5:T2c99,---
+title: Home Manager bilan ishlashni boshlash
+authors: ['Orzklv']
+description:
+  NixOS da Home Manager bilan birgalikda ishlab ko'ramiz.
+---
+
+# Home Manager bilan ishlashni boshlash
+
+Yuqorida aytib o'tganimdek, NixOS faqat tizim darajasidagi konfiguratsiyalarni boshqaradi. Uy katalogidagi foydalanuvchi darajasidagi konfiguratsiyalarni boshqarish uchun esa biz Home Manager oʻrnatishimiz kerak.
+
+Rasmiy [Home Manager qoʻllanmasiga](https://nix-community.github.io/home-manager/index.xhtml) koʻra, Home Manager'ni NixOS moduli sifatida oʻrnatish uchun avval `/etc/nixos/home.nix` faylini yaratishimiz kerak. Quyida misol uchun ushbu faylning mazmuni keltirilgan:
+
+```nix
+{ config, pkgs, ... }:
+
+{
+  # Iltimos, foydalanuvchi nomini va uy katalogini oʻz holatingizga moslang
+  home.username = "ryan";
+  home.homeDirectory = "/home/ryan";
+
+  # Joriy katalogdagi konfiguratsiya faylini koʻrsatilgan joyga bogʻlash
+  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
+
+  # `./scripts` ichidagi barcha fayllarni `~/.config/i3/scripts` ga bogʻlash
+  # home.file.".config/i3/scripts" = {
+  #   source = ./scripts;
+  #   recursive = true;   # rekursiv bogʻlash
+  #   executable = true;  # barcha fayllarni bajariladigan qilish
+  # };
+
+  # Fayl mazmunini toʻgʻridan-toʻgʻri nix konfiguratsiyasiga yozish
+  # home.file.".xxx".text = ''
+  #     xxx
+  # '';
+
+  # 4k monitor uchun kursor hajmi va dpi sozlamalari
+  xresources.properties = {
+    "Xcursor.size" = 16;
+    "Xft.dpi" = 172;
+  };
+
+  # Foydalanuvchi profiliga oʻrnatilishi kerak boʻlgan paketlar
+  home.packages = with pkgs; [
+    # ushbu keltirilganlar men kunlik davomida ishlatadiganlarim
+    # o'zingiznikini qo'shish yoki keltirilganlardan olib tashashdan tortinmang
+    
+    neofetch
+    nnn # terminal fayl menejer
+    
+    # arxivlar
+    zip
+    xz
+    unzip
+    p7zip
+    
+    # utilitalar
+    ripgrep # regex tuzilma yordamida kataloglar ichidan rekursiv qidiruv
+    jq # json ustida ishlovchi yengil va qulay instrument
+    yq-go # yaml ustida ishlovchi
+    eza # `ls` o'rniga zamonaviy o'rnini bosuvchi
+    fzf # buyruq satrli fuzzy qidiruv utilitasi
+    
+    # tarmoq utilitalari
+    mtr # tarmoq diagnostika utilitasi
+    iperf3
+    dnsutils # `dig` + `nslookup`
+    ldns # `dig` o'rnini bosuvchi, `drill` buyrug'ini taqdim etadi
+    aria2 # multi-protokol va multi-manba'lik buyruq satridagi yuklovchi utilita
+    socat # openbsd-netcat o'rnini bosuvchi
+    nmap # tarmoq qidiruvchi va xavfsizlik auditi uchun utilita
+    ipcalc # IPv4/v6 lar uchun kalkulyator
+    
+    # hokazo
+    cowsay
+    file
+    which
+    tree
+    gnused
+    gnutar
+    gawk
+    zstd
+    gnupg
+    
+    # nix ga tegishli
+    # 
+    # `nom` buyrug'ini beradi va `nix` day ishlaydi
+    # tafsilotli log chiqishini ta’minlaydi
+    nix-output-monitor
+    
+    # mahsuldorlik
+    hugo # statik sayt yaratish vositasi
+    glow # terminalda markdown ko‘ruvchisi
+    
+    btop # htop/nmon o'rnini bosuvchi
+    iotop # io (chiqim/kirim) ko'rsatib turuvchi
+    iftop # tarmoq ko'rsatib turuvchi
+    
+    # tizim chaqiruvchi monitoring
+    strace # tizimga bo'lgan chaqiruvlar monitoringi
+    ltrace # kutubxonalardan bo'lgan chaqiruvlar monitoringi
+    lsof # ochilgan fayllar ro'yxatlovchi
+    
+    # tizim utilitalari
+    sysstat
+    lm_sensors # `sensors` buyrug'i uchun
+    ethtool
+    pciutils # lspci
+    usbutils # lsusb
+  ];
+
+  # oddiy git sozlamari, o'zingizga moslang
+  programs.git = {
+    enable = true;
+    userName = "Ryan Yin";
+    userEmail = "xiaoyin_c@qq.com";
+  };
+
+  # starship - istalgan buyruq satri ko'rinishi o'zgartiruvchi
+  programs.starship = {
+    enable = true;
+    # moslangan sozlamalar
+    settings = {
+      add_newline = false;
+      aws.disabled = true;
+      gcloud.disabled = true;
+      line_break.disabled = true;
+    };
+  };
+
+  # alacritty - platformalarar-o, GPU orqali tezlatilgan buyruq satr emulyatori
+  programs.alacritty = {
+    enable = true;
+    # moslangan sozlamalar
+    settings = {
+      env.TERM = "xterm-256color";
+      font = {
+        size = 12;
+        draw_bold_text_with_bright_colors = true;
+      };
+      scrolling.multiplier = 5;
+      selection.save_to_clipboard = true;
+    };
+  };
+
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    # ESLATMA o'zingizni bashrc'ingizni qo'shib keting
+    bashrcExtra = ''
+      export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+    '';
+    
+    # qiqartma nomlar qo'shing, xoh qo'shing, xoh olib tashlang
+    shellAliases = {
+      k = "kubectl";
+      urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
+      urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+    };
+  };
+
+  # Bu qiymat qaysi versiyadagi home-manager sozlamari bilan
+  # to'g'ri kelishini belgilaydi. Bu ko'proq home manager ning
+  # eski versiya bilan chiqishmaydigan yangi versiyasi chiqganda
+  # buzilib qolishlar oldini oladi.
+  # 
+  # Shu qiymat o'zgartirmayam home manager yangilasa bo'ladi. Ba'tafsil
+  # har bir relizda bo'lgan o'zgarishlar home managerning relizlar 
+  # eslatmasida ko'zdan kechirib chiqing.
+  home.stateVersion = "24.11";
+
+  # Home Manager o'zini o'rnatishiga qo'yib beraylik
+  programs.home-manager.enable = true;
+}
+```
+
+Yaratilgan `/etc/nixos/home.nix` faylini tizim konfiguratsiyasiga qoʻshish uchun `/etc/nixos/flake.nix` faylini yangilaymiz. Shuning uchun, keltirilgan buyruqdan foydalaning:
+
+```shell
+nix flake new example -t github:nix-community/home-manager#nixos
+```
+
+Kerakli sozlashlardan soʻng, `/etc/nixos/flake.nix` quyidagi koʻrinishda boʻladi:
+
+```nix
+{
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    # home manager, foydalanuvchi sozlamari boshqarish uchun ishlatiladi
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.11";
+      # inputsdagi `follows` kaliti moslab olish uchun ishlatiladi.
+      # home manager ning `inputs.nixpkgs` si ushbu fleykning `inputs.nixpkgs`
+      # si bilan bir xil tarzda olib boriladi har xil bo'lgandagi muammolarni
+      # bartaraf etish uchun.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs@{ nixpkgs, home-manager, ... }: {
+    nixosConfigurations = {
+      # ESLATMA iltimos hostname `my-nixos` ni o'zingiznikiga moslang
+      my-nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          
+          # home manager ni nixos moduli qilib yuklang
+          # shunda home manager sozlamalari avtomatik tarzda qo'shilib ketadi `nixos-rebuild` ishga tushurilganda
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            
+            # ESLATMA ryan ni o'zingizni foydalanuvchi otingizga almashtiring
+            home-manager.users.ryan = import ./home.nix;
+            
+            # Qo'shimchasiga home-manager.extraSpecialArgs ni home.nix ga argument oshirish uchun ishlatsangiz bo'ladi
+          }
+        ];
+      };
+    };
+  };
+}
+```
+
+Keyin `sudo nixos-rebuild switch` buyrug‘ini ishga tushiring, Home Manager avtomatik o‘rnatiladi.
+
+> Agar tizimingizning kompyuter nomi `my-nixos` bo‘lmasa, `flake.nix` faylidagi `nixosConfigurations` nomini moslashtiring yoki `--flake /etc/nixos#my-nixos` ni ishlating.
+
+O‘rnatilgandan so‘ng, barcha foydalanuvchi darajasidagi paketlar va konfiguratsiyalar `/etc/nixos/home.nix` orqali boshqariladi. `sudo nixos-rebuild switch` ishga tushirilganda, Home Manager konfiguratsiyasi avtomatik qo‘llaniladi. (Qo‘lda `home-manager switch` buyrug‘ini ishga tushirish shart emas!)
+
+home.nix faylida foydalanilishi mumkin bo‘lgan variantlarni aniqlash uchun quyidagi hujjatlarga murojaat qiling:
+
+- [Home Manager - A ilova. Konfiguratsiya variantlari](https://nix-community.github.io/home-manager/options.xhtml): Barcha mavjud variantlar ro‘yxati, kalit so‘zlar orqali izlash tavsiya etiladi.
+  - [Home Manager Option Search](https://mipmip.github.io/home-manager-option-search/): yaxshiroq interfeysga ega bo‘lgan izlash vositasi.
+- [home-manager](https://github.com/nix-community/home-manager): Ba’zi variantlar rasmiy hujjatda ko‘rsatilmagan yoki tushunarsiz bo‘lishi mumkin, to‘g‘ridan-to‘g‘ri kodni o‘qing.
+
+
+## Home Manager va NixOS farqlari
+
+Ko‘plab dasturiy paketlar yoki konfiguratsiyalarni NixOS modullari (`configuration.nix`) orqali ham, Home Manager (`home.nix`) orqali ham sozlash mumkin. Savol tug‘iladi: **ulardan qaysi birini tanlash kerak?**
+
+Keling, oldin farq qiladigan joylariga nazar tashlaymiz: NixOS Modullari bilan o'rnatilgan paketlar va konfiguratsiya fayllar operatsion tizim uchun global hisoblanadi. Global konfiguratsiya fayllar `/etc` da saqlanadi, va tizim-aro o'rnatilgan dastur har qanday muhitda ishlayveradi.
+
+Home Manager bilan o'rnatilgan konfiguratsiya va dastur esa ma'lum bir foydalanuvchiga tegishli bo'ladi. O'sha dastur ma'lum bir foydalanuvchi muhitidagina ishlaydi xolos, foydalanuchi akkauntini o'zgartirganingizdan keyin esa u dasturdan foydalana olmaysiz.
+
+Ushbu xususiyatlarga asoslangan holda, umumiy xulosa shuki:
+- NixOS modullari: barcha foydalanuvchilar tomonidan talab qilinadigan va tizimning asosi bo'lgan dastur va konfiguratsiyalarnigina o'rnating.
+  - Masalan, ma'lum bir dasturni root foydalanuvchiga aylanganingizda ham ishlayverishini istasangiz, yoki bitta konfiguratsiyani tizim-aro qo'llashni xohlasangiz, uni siz NixOS Modullari bilan o'rnatishingiz kerak.
+- Home Manager: buni esa boshqa har qanday konfiguratsiya va dasturlar uchun ishlating.
+
+Bu usulni afzalliklari shuki:
+
+1. Tizim darajasida o'rnatilgan dastur va orqa-fon servislari ko'pincha root huquqlari bilan ishlaydi. Keraksiz dasturlarning tizim darajasida o'rnatilishini cheklash esa, tizim xavfsizligini mustahkamlaydi.
+
+2. Home Managerda yozilgan ko'plab konfiguratsiyalar NixOS, macOS va boshqa Linux distributivlari uchun umimiy hisoblanadi. Dasturlarni o'rnatish va tizimni sozlash uchun Home Managerni tanlash, konfiguratsiyaning moslashuvchan bo'lishini ta'minlaydi.
+
+3. Ko'p-foydanaluvchili konfiguratsiya: Home Manager bilan o'rnatilgan dastur va konfiguratsiyalar turli foydalanuvchi muhitlarini izolyatsiya qila oladi. Bu esa foydalanuvchilar orasidagi konfiguratsiya vs dastur versiyalaridagi buzilishlarning oldini oladi.
+
+## Home Manager orqali o‘rnatilgan dasturlardan root sifatida foydalanish
+
+Agar siz home.nix orqali o‘rnatilgan kubectl kabi dasturdan root sifatida foydalanmoqchi bo‘lsangiz, quyidagi muammo yuzaga keladi:
+
+```sh
+# 1. kubtectl mavjud
+› kubectl | head
+kubectl Kubernetes klaster boshqaruvchi utilita.
+
+Batafsil: https://kubernetes.io/docs/reference/kubectl/
+......
+
+# 2. `root` foydalanuvchiga o‘tish
+› sudo su
+
+# `kubectl` buyrug‘ endi topilmaydi
+> kubectl
+Error: ... executable was not found
+
+  × External command failed
+   ╭─[entry #1:1:1]
+ 1 │ kubectl
+   · ───┬───
+   ·    ╰── executable was not found
+   ╰────
+  help: No such file or directory (os error 2)
+
+
+/home/ryan/nix-config> exit
+```
+
+Yechim: `sudo` orqali buyrug‘ni bevosita joriy foydalanuvchi nomidan `root` sifatida ishga tushiring:
+
+```sh
+› sudo kubectl
+kubectl controls the Kubernetes cluster manager.
+...
+```0:{"buildId":"6tGvkqnIMFanf1U03PexG","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"x:mx-auto x:flex x:max-w-(--nextra-content-width)","children":["$","$L2",null,{"value":[{"value":"Home Manager va NixOS farqlari","id":"home-manager-va-nixos-farqlari","depth":2},{"value":"Home Manager orqali o‘rnatilgan dasturlardan root sifatida foydalanish","id":"home-manager-orqali-ornatilgan-dasturlardan-root-sifatida-foydalanish","depth":2}],"children":[["$","$L3",null,{}],["$","$L4",null,{"metadata":{"title":"Home Manager bilan ishlashni boshlash","authors":["Orzklv"],"description":"NixOS da Home Manager bilan birgalikda ishlab ko'ramiz.","filePath":"app/learn/start-using-home-manager/page.mdx","timestamp":1785223155000},"sourceCode":"$5","children":["$L6","$L7"]}]]}]}],null,"$L8"]}],"loading":null,"isPartial":false}
+6:["$","div",null,{"id":"nextra-skip-nav"}]
+7:["$","main",null,{"data-pagefind-body":true,"children":[["$","h1",null,{"className":"x:tracking-tight x:text-slate-900 x:dark:text-slate-100 x:font-bold x:mt-2 x:text-4xl","children":["Home Manager bilan ishlashni boshlash","$undefined"]}],"\n",["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Yuqorida aytib o’tganimdek, NixOS faqat tizim darajasidagi konfiguratsiyalarni boshqaradi. Uy katalogidagi foydalanuvchi darajasidagi konfiguratsiyalarni boshqarish uchun esa biz Home Manager oʻrnatishimiz kerak."}],"\n",["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Rasmiy ",["$","a",null,{"href":"https://nix-community.github.io/home-manager/index.xhtml","target":"_blank","rel":"noreferrer","className":"x:focus-visible:nextra-focus x:text-primary-600 x:underline x:hover:no-underline x:decoration-from-font x:[text-underline-position:from-font]","children":["Home Manager qoʻllanmasiga",[" ",["$","svg",null,{"fill":"none","stroke":"currentColor","strokeLinecap":"round","strokeLinejoin":"round","strokeWidth":1.7,"viewBox":"0 0 24 24","height":"1em","className":"x:inline x:align-baseline x:shrink-0","children":[["$","path",null,{"d":"M7 17L17 7"}],["$","path",null,{"d":"M7 7h10v10"}]]}]]]}]," koʻra, Home Manager’ni NixOS moduli sifatida oʻrnatish uchun avval ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"/etc/nixos/home.nix"}]," faylini yaratishimiz kerak. Quyida misol uchun ushbu faylning mazmuni keltirilgan:"]}],"\n",["$","div",null,{"data-pagefind-ignore":"all","className":"nextra-code x:relative x:not-first:mt-[1.25em]","children":["$undefined",["$","pre",null,{"className":"x:group x:focus-visible:nextra-focus x:overflow-x-auto x:subpixel-antialiased x:text-[.9em] x:bg-white x:dark:bg-black x:py-4 x:ring-1 x:ring-inset x:ring-gray-300 x:dark:ring-neutral-700 x:contrast-more:ring-gray-900 x:contrast-more:dark:ring-gray-50 x:contrast-more:contrast-150 x:rounded-md not-prose","tabIndex":"0","children":[["$","div",null,{"className":"x:group-hover:opacity-100 x:group-focus:opacity-100 x:opacity-0 x:transition x:focus-within:opacity-100 x:flex x:gap-1 x:absolute x:right-4 x:top-2","children":[["$","$L9",null,{"children":["$","svg",null,{"viewBox":"0 0 24 24","fill":"currentColor","height":"1em","children":["$","path",null,{"d":"M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"}]}]}],false]}],["$","code",null,{"className":"nextra-code","dir":"ltr","children":[["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"{ config"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":","}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" pkgs"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":","}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ... "}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"}:"}]]}],"\n",["$","span",null,{"children":" "}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"{"}]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Iltimos, foydalanuvchi nomini va uy katalogini oʻz holatingizga moslang"}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  home"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"username"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"ryan\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  home"}],"$La","$Lb","$Lc","$Ld","$Le"]}],"\n","$Lf","\n","$L10","\n","$L11","\n","$L12","\n","$L13","\n","$L14","\n","$L15","\n","$L16","\n","$L17","\n","$L18","\n","$L19","\n","$L1a","\n","$L1b","\n","$L1c","\n","$L1d","\n","$L1e","\n","$L1f","\n","$L20","\n","$L21","\n","$L22","\n","$L23","\n","$L24","\n","$L25","\n","$L26","\n","$L27","\n","$L28","\n","$L29","\n","$L2a","\n","$L2b","\n","$L2c","\n","$L2d","\n","$L2e","\n","$L2f","\n","$L30","\n","$L31","\n","$L32","\n","$L33","\n","$L34","\n","$L35","\n","$L36","\n","$L37","\n","$L38","\n","$L39","\n","$L3a","\n","$L3b","\n","$L3c","\n","$L3d","\n","$L3e","\n","$L3f","\n","$L40","\n","$L41","\n","$L42","\n","$L43","\n","$L44","\n","$L45","\n","$L46","\n","$L47","\n","$L48","\n","$L49","\n","$L4a","\n","$L4b","\n","$L4c","\n","$L4d","\n","$L4e","\n","$L4f","\n","$L50","\n","$L51","\n","$L52","\n","$L53","\n","$L54","\n","$L55","\n","$L56","\n","$L57","\n","$L58","\n","$L59","\n","$L5a","\n","$L5b","\n","$L5c","\n","$L5d","\n","$L5e","\n","$L5f","\n","$L60","\n","$L61","\n","$L62","\n","$L63","\n","$L64","\n","$L65","\n","$L66","\n","$L67","\n","$L68","\n","$L69","\n","$L6a","\n","$L6b","\n","$L6c","\n","$L6d","\n","$L6e","\n","$L6f","\n","$L70","\n","$L71","\n","$L72","\n","$L73","\n","$L74","\n","$L75","\n","$L76","\n","$L77","\n","$L78","\n","$L79","\n","$L7a","\n","$L7b","\n","$L7c","\n","$L7d","\n","$L7e","\n","$L7f","\n","$L80","\n","$L81","\n","$L82","\n","$L83","\n","$L84","\n","$L85","\n","$L86","\n","$L87","\n","$L88","\n","$L89","\n","$L8a","\n","$L8b","\n","$L8c","\n","$L8d","\n","$L8e","\n","$L8f","\n","$L90","\n","$L91","\n","$L92","\n","$L93","\n","$L94","\n","$L95","\n","$L96","\n","$L97","\n","$L98","\n","$L99","\n","$L9a","\n","$L9b","\n","$L9c","\n","$L9d","\n","$L9e","\n","$L9f","\n","$La0","\n","$La1","\n","$La2","\n","$La3","\n","$La4","\n","$La5","\n","$La6","\n","$La7","\n","$La8"]}]]}]]}],"\n","$La9","\n","$Laa","\n","$Lab","\n","$Lac","\n","$Lad","\n","$Lae","\n","$Laf","\n","$Lb0","\n","$Lb1","\n","$Lb2","\n","$Lb3","\n","$Lb4","\n","$Lb5","\n","$Lb6","\n","$Lb7","\n","$Lb8","\n","$Lb9","\n","$Lba","\n","$Lbb","\n","$Lbc","\n","$Lbd","\n","$Lbe"]}]
+8:["$","$Lbf",null,{"children":["$","$c0",null,{"name":"Next.MetadataOutlet","children":"$@c1"}]}]
+a:["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}]
+b:["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"homeDirectory"}]
+c:["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}]
+d:["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"/home/ryan\""}]
+e:["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]
+f:["$","span",null,{"children":" "}]
+10:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Joriy katalogdagi konfiguratsiya faylini koʻrsatilgan joyga bogʻlash"}]}]
+11:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # home.file.\".config/i3/wallpaper.jpg\".source = ./wallpaper.jpg;"}]}]
+12:["$","span",null,{"children":" "}]
+13:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # `./scripts` ichidagi barcha fayllarni `~/.config/i3/scripts` ga bogʻlash"}]}]
+14:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # home.file.\".config/i3/scripts\" = {"}]}]
+15:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  #   source = ./scripts;"}]}]
+16:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  #   recursive = true;   # rekursiv bogʻlash"}]}]
+17:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  #   executable = true;  # barcha fayllarni bajariladigan qilish"}]}]
+18:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # };"}]}]
+19:["$","span",null,{"children":" "}]
+1a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Fayl mazmunini toʻgʻridan-toʻgʻri nix konfiguratsiyasiga yozish"}]}]
+1b:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # home.file.\".xxx\".text = ''"}]}]
+1c:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  #     xxx"}]}]
+1d:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # '';"}]}]
+1e:["$","span",null,{"children":" "}]
+1f:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # 4k monitor uchun kursor hajmi va dpi sozlamalari"}]}]
+20:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  xresources"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"properties"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+21:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"    \"Xcursor.size\""}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" 16"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+22:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"    \"Xft.dpi\""}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" 172"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+23:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+24:["$","span",null,{"children":" "}]
+25:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Foydalanuvchi profiliga oʻrnatilishi kerak boʻlgan paketlar"}]}]
+26:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  home"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"packages"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" with"}],["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":" pkgs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"; ["}]]}]
+27:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # ushbu keltirilganlar men kunlik davomida ishlatadiganlarim"}]}]
+28:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # o'zingiznikini qo'shish yoki keltirilganlardan olib tashashdan tortinmang"}]}]
+29:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+2a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    neofetch"}]}]
+2b:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    nnn"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # terminal fayl menejer"}]]}]
+2c:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+2d:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # arxivlar"}]}]
+2e:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    zip"}]}]
+2f:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    xz"}]}]
+30:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    unzip"}]}]
+31:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    p7zip"}]}]
+32:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+33:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # utilitalar"}]}]
+34:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    ripgrep"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # regex tuzilma yordamida kataloglar ichidan rekursiv qidiruv"}]]}]
+35:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    jq"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # json ustida ishlovchi yengil va qulay instrument"}]]}]
+36:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    yq-go"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # yaml ustida ishlovchi"}]]}]
+37:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    eza"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # `ls` o'rniga zamonaviy o'rnini bosuvchi"}]]}]
+38:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    fzf"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # buyruq satrli fuzzy qidiruv utilitasi"}]]}]
+39:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+3a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # tarmoq utilitalari"}]}]
+3b:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    mtr"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # tarmoq diagnostika utilitasi"}]]}]
+3c:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    iperf3"}]}]
+3d:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    dnsutils"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # `dig` + `nslookup`"}]]}]
+3e:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    ldns"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # `dig` o'rnini bosuvchi, `drill` buyrug'ini taqdim etadi"}]]}]
+3f:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    aria2"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # multi-protokol va multi-manba'lik buyruq satridagi yuklovchi utilita"}]]}]
+40:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    socat"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # openbsd-netcat o'rnini bosuvchi"}]]}]
+41:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    nmap"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # tarmoq qidiruvchi va xavfsizlik auditi uchun utilita"}]]}]
+42:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    ipcalc"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # IPv4/v6 lar uchun kalkulyator"}]]}]
+43:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+44:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # hokazo"}]}]
+45:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    cowsay"}]}]
+46:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    file"}]}]
+47:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    which"}]}]
+48:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    tree"}]}]
+49:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    gnused"}]}]
+4a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    gnutar"}]}]
+4b:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    gawk"}]}]
+4c:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    zstd"}]}]
+4d:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    gnupg"}]}]
+4e:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+4f:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # nix ga tegishli"}]}]
+50:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # "}]}]
+51:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # `nom` buyrug'ini beradi va `nix` day ishlaydi"}]}]
+52:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # tafsilotli log chiqishini ta’minlaydi"}]}]
+53:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    nix-output-monitor"}]}]
+54:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+55:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # mahsuldorlik"}]}]
+56:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    hugo"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # statik sayt yaratish vositasi"}]]}]
+57:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    glow"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # terminalda markdown ko‘ruvchisi"}]]}]
+58:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+59:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    btop"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # htop/nmon o'rnini bosuvchi"}]]}]
+5a:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    iotop"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # io (chiqim/kirim) ko'rsatib turuvchi"}]]}]
+5b:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    iftop"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # tarmoq ko'rsatib turuvchi"}]]}]
+5c:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+5d:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # tizim chaqiruvchi monitoring"}]}]
+5e:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    strace"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # tizimga bo'lgan chaqiruvlar monitoringi"}]]}]
+5f:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    ltrace"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # kutubxonalardan bo'lgan chaqiruvlar monitoringi"}]]}]
+60:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    lsof"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # ochilgan fayllar ro'yxatlovchi"}]]}]
+61:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+62:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # tizim utilitalari"}]}]
+63:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    sysstat"}]}]
+64:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    lm_sensors"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # `sensors` buyrug'i uchun"}]]}]
+65:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    ethtool"}]}]
+66:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    pciutils"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # lspci"}]]}]
+67:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"    usbutils"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" # lsusb"}]]}]
+68:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  ];"}]}]
+69:["$","span",null,{"children":" "}]
+6a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # oddiy git sozlamari, o'zingizga moslang"}]}]
+6b:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  programs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"git"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+6c:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    enable"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+6d:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    userName"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"Ryan Yin\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+6e:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    userEmail"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"xiaoyin_c@qq.com\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+6f:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+70:["$","span",null,{"children":" "}]
+71:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # starship - istalgan buyruq satri ko'rinishi o'zgartiruvchi"}]}]
+72:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  programs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"starship"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+73:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    enable"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+74:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # moslangan sozlamalar"}]}]
+75:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    settings"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+76:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      add_newline"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" false"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+77:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      aws"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"disabled"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+78:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      gcloud"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"disabled"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+79:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      line_break"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"disabled"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+7a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    };"}]}]
+7b:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+7c:["$","span",null,{"children":" "}]
+7d:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # alacritty - platformalarar-o, GPU orqali tezlatilgan buyruq satr emulyatori"}]}]
+7e:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  programs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"alacritty"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+7f:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    enable"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+80:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # moslangan sozlamalar"}]}]
+81:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    settings"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+82:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      env"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"TERM"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"xterm-256color\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+83:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      font"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+84:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"        size"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" 12"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+85:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"        draw_bold_text_with_bright_colors"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+86:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"      };"}]}]
+87:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      scrolling"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"multiplier"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" 5"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+88:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      selection"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"save_to_clipboard"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+89:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    };"}]}]
+8a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+8b:["$","span",null,{"children":" "}]
+8c:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  programs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"bash"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+8d:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    enable"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+8e:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    enableCompletion"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+8f:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # ESLATMA o'zingizni bashrc'ingizni qo'shib keting"}]}]
+90:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    bashrcExtra"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" ''"}]]}]
+91:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"      export PATH=\"$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin\""}]}]
+92:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"    ''"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+93:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    "}]}]
+94:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # qiqartma nomlar qo'shing, xoh qo'shing, xoh olib tashlang"}]}]
+95:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    shellAliases"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+96:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      k"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"kubectl\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+97:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      urldecode"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+98:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      urlencode"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+99:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    };"}]}]
+9a:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+9b:["$","span",null,{"children":" "}]
+9c:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Bu qiymat qaysi versiyadagi home-manager sozlamari bilan"}]}]
+9d:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # to'g'ri kelishini belgilaydi. Bu ko'proq home manager ning"}]}]
+9e:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # eski versiya bilan chiqishmaydigan yangi versiyasi chiqganda"}]}]
+9f:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # buzilib qolishlar oldini oladi."}]}]
+a0:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # "}]}]
+a1:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Shu qiymat o'zgartirmayam home manager yangilasa bo'ladi. Ba'tafsil"}]}]
+a2:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # har bir relizda bo'lgan o'zgarishlar home managerning relizlar "}]}]
+a3:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # eslatmasida ko'zdan kechirib chiqing."}]}]
+a4:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  home"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"stateVersion"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"24.11\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+a5:["$","span",null,{"children":" "}]
+a6:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"  # Home Manager o'zini o'rnatishiga qo'yib beraylik"}]}]
+a7:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  programs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"home-manager"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"enable"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+a8:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"}"}]}]
+a9:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Yaratilgan ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"/etc/nixos/home.nix"}]," faylini tizim konfiguratsiyasiga qoʻshish uchun ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"/etc/nixos/flake.nix"}]," faylini yangilaymiz. Shuning uchun, keltirilgan buyruqdan foydalaning:"]}]
+aa:["$","div",null,{"data-pagefind-ignore":"all","className":"nextra-code x:relative x:not-first:mt-[1.25em]","children":["$undefined",["$","pre",null,{"className":"x:group x:focus-visible:nextra-focus x:overflow-x-auto x:subpixel-antialiased x:text-[.9em] x:bg-white x:dark:bg-black x:py-4 x:ring-1 x:ring-inset x:ring-gray-300 x:dark:ring-neutral-700 x:contrast-more:ring-gray-900 x:contrast-more:dark:ring-gray-50 x:contrast-more:contrast-150 x:rounded-md not-prose","tabIndex":"0","children":[["$","div",null,{"className":"x:group-hover:opacity-100 x:group-focus:opacity-100 x:opacity-0 x:transition x:focus-within:opacity-100 x:flex x:gap-1 x:absolute x:right-4 x:top-2","children":[["$","$L9",null,{"children":["$","svg",null,{"viewBox":"0 0 24 24","fill":"currentColor","height":"1em","children":["$","path",null,{"d":"M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"}]}]}],false]}],["$","code",null,{"className":"nextra-code","dir":"ltr","children":["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"nix"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" flake"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" new"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" example"}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" -t"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" github:nix-community/home-manager#nixos"}]]}]}]]}]]}]
+ab:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Kerakli sozlashlardan soʻng, ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"/etc/nixos/flake.nix"}]," quyidagi koʻrinishda boʻladi:"]}]
+ac:["$","div",null,{"data-pagefind-ignore":"all","className":"nextra-code x:relative x:not-first:mt-[1.25em]","children":["$undefined",["$","pre",null,{"className":"x:group x:focus-visible:nextra-focus x:overflow-x-auto x:subpixel-antialiased x:text-[.9em] x:bg-white x:dark:bg-black x:py-4 x:ring-1 x:ring-inset x:ring-gray-300 x:dark:ring-neutral-700 x:contrast-more:ring-gray-900 x:contrast-more:dark:ring-gray-50 x:contrast-more:contrast-150 x:rounded-md not-prose","tabIndex":"0","children":[["$","div",null,{"className":"x:group-hover:opacity-100 x:group-focus:opacity-100 x:opacity-0 x:transition x:focus-within:opacity-100 x:flex x:gap-1 x:absolute x:right-4 x:top-2","children":[["$","$L9",null,{"children":["$","svg",null,{"viewBox":"0 0 24 24","fill":"currentColor","height":"1em","children":["$","path",null,{"d":"M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"}]}]}],false]}],["$","code",null,{"className":"nextra-code","dir":"ltr","children":[["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"{"}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  description"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"NixOS configuration\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}],"\n",["$","span",null,{"children":" "}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  inputs"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    nixpkgs"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"url"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"github:nixos/nixpkgs/nixos-24.11\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"    # home manager, foydalanuvchi sozlamari boshqarish uchun ishlatiladi"}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    home-manager"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      url"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"github:nix-community/home-manager/release-24.11\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"      # inputsdagi `follows` kaliti moslab olish uchun ishlatiladi."}]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"      # home manager ning `inputs.nixpkgs` si ushbu fleykning `inputs.nixpkgs`"}]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"      # si bilan bir xil tarzda olib boriladi har xil bo'lgandagi muammolarni"}]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"      # bartaraf etish uchun."}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      inputs"}],"$Lc2","$Lc3","$Lc4","$Lc5","$Lc6","$Lc7","$Lc8"]}],"\n","$Lc9","\n","$Lca","\n","$Lcb","\n","$Lcc","\n","$Lcd","\n","$Lce","\n","$Lcf","\n","$Ld0","\n","$Ld1","\n","$Ld2","\n","$Ld3","\n","$Ld4","\n","$Ld5","\n","$Ld6","\n","$Ld7","\n","$Ld8","\n","$Ld9","\n","$Lda","\n","$Ldb","\n","$Ldc","\n","$Ldd","\n","$Lde","\n","$Ldf","\n","$Le0","\n","$Le1","\n","$Le2","\n","$Le3","\n","$Le4"]}]]}]]}]
+ad:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Keyin ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"sudo nixos-rebuild switch"}]," buyrug‘ini ishga tushiring, Home Manager avtomatik o‘rnatiladi."]}]
+ae:["$","blockquote",null,{"className":"x:not-first:mt-[1.25em] x:border-gray-300 x:italic x:text-gray-700 x:dark:border-gray-700 x:dark:text-gray-400 x:border-s-2 x:ps-[1.5em]","children":["\n",["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Agar tizimingizning kompyuter nomi ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"my-nixos"}]," bo‘lmasa, ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"flake.nix"}]," faylidagi ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"nixosConfigurations"}]," nomini moslashtiring yoki ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"--flake /etc/nixos#my-nixos"}]," ni ishlating."]}],"\n"]}]
+af:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["O‘rnatilgandan so‘ng, barcha foydalanuvchi darajasidagi paketlar va konfiguratsiyalar ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"/etc/nixos/home.nix"}]," orqali boshqariladi. ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"sudo nixos-rebuild switch"}]," ishga tushirilganda, Home Manager konfiguratsiyasi avtomatik qo‘llaniladi. (Qo‘lda ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"home-manager switch"}]," buyrug‘ini ishga tushirish shart emas!)"]}]
+b0:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"home.nix faylida foydalanilishi mumkin bo‘lgan variantlarni aniqlash uchun quyidagi hujjatlarga murojaat qiling:"}]
+b1:["$","ul",null,{"className":"x:[:is(ol,ul)_&]:my-[.75em] x:not-first:mt-[1.25em] x:list-disc x:ms-[1.5em]","children":["\n",["$","li",null,{"className":"x:my-[.5em]","children":[["$","a",null,{"href":"https://nix-community.github.io/home-manager/options.xhtml","target":"_blank","rel":"noreferrer","className":"x:focus-visible:nextra-focus x:text-primary-600 x:underline x:hover:no-underline x:decoration-from-font x:[text-underline-position:from-font]","children":["Home Manager - A ilova. Konfiguratsiya variantlari",[" ",["$","svg",null,{"fill":"none","stroke":"currentColor","strokeLinecap":"round","strokeLinejoin":"round","strokeWidth":1.7,"viewBox":"0 0 24 24","height":"1em","className":"x:inline x:align-baseline x:shrink-0","children":[["$","path",null,{"d":"M7 17L17 7"}],["$","path",null,{"d":"M7 7h10v10"}]]}]]]}],": Barcha mavjud variantlar ro‘yxati, kalit so‘zlar orqali izlash tavsiya etiladi.","\n",["$","ul",null,{"className":"x:[:is(ol,ul)_&]:my-[.75em] x:not-first:mt-[1.25em] x:list-disc x:ms-[1.5em]","children":["\n",["$","li",null,{"className":"x:my-[.5em]","children":[["$","a",null,{"href":"https://mipmip.github.io/home-manager-option-search/","target":"_blank","rel":"noreferrer","className":"x:focus-visible:nextra-focus x:text-primary-600 x:underline x:hover:no-underline x:decoration-from-font x:[text-underline-position:from-font]","children":["Home Manager Option Search",[" ",["$","svg",null,{"fill":"none","stroke":"currentColor","strokeLinecap":"round","strokeLinejoin":"round","strokeWidth":1.7,"viewBox":"0 0 24 24","height":"1em","className":"x:inline x:align-baseline x:shrink-0","children":[["$","path",null,{"d":"M7 17L17 7"}],["$","path",null,{"d":"M7 7h10v10"}]]}]]]}],": yaxshiroq interfeysga ega bo‘lgan izlash vositasi."]}],"\n"]}],"\n"]}],"\n",["$","li",null,{"className":"x:my-[.5em]","children":[["$","a",null,{"href":"https://github.com/nix-community/home-manager","target":"_blank","rel":"noreferrer","className":"x:focus-visible:nextra-focus x:text-primary-600 x:underline x:hover:no-underline x:decoration-from-font x:[text-underline-position:from-font]","children":["home-manager",[" ",["$","svg",null,{"fill":"none","stroke":"currentColor","strokeLinecap":"round","strokeLinejoin":"round","strokeWidth":1.7,"viewBox":"0 0 24 24","height":"1em","className":"x:inline x:align-baseline x:shrink-0","children":[["$","path",null,{"d":"M7 17L17 7"}],["$","path",null,{"d":"M7 7h10v10"}]]}]]]}],": Ba’zi variantlar rasmiy hujjatda ko‘rsatilmagan yoki tushunarsiz bo‘lishi mumkin, to‘g‘ridan-to‘g‘ri kodni o‘qing."]}],"\n"]}]
+b2:["$","h2",null,{"id":"home-manager-va-nixos-farqlari","className":"x:tracking-tight x:text-slate-900 x:dark:text-slate-100 x:font-semibold x:target:animate-[fade-in_1.5s] x:mt-10 x:border-b x:pb-1 x:text-3xl nextra-border","children":["Home Manager va NixOS farqlari",["$","$Le5",null,{"id":"home-manager-va-nixos-farqlari"}]]}]
+b3:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Ko‘plab dasturiy paketlar yoki konfiguratsiyalarni NixOS modullari (",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"configuration.nix"}],") orqali ham, Home Manager (",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"home.nix"}],") orqali ham sozlash mumkin. Savol tug‘iladi: ",["$","strong",null,{"children":"ulardan qaysi birini tanlash kerak?"}]]}]
+b4:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Keling, oldin farq qiladigan joylariga nazar tashlaymiz: NixOS Modullari bilan o’rnatilgan paketlar va konfiguratsiya fayllar operatsion tizim uchun global hisoblanadi. Global konfiguratsiya fayllar ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"/etc"}]," da saqlanadi, va tizim-aro o’rnatilgan dastur har qanday muhitda ishlayveradi."]}]
+b5:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Home Manager bilan o’rnatilgan konfiguratsiya va dastur esa ma’lum bir foydalanuvchiga tegishli bo’ladi. O’sha dastur ma’lum bir foydalanuvchi muhitidagina ishlaydi xolos, foydalanuchi akkauntini o’zgartirganingizdan keyin esa u dasturdan foydalana olmaysiz."}]
+b6:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Ushbu xususiyatlarga asoslangan holda, umumiy xulosa shuki:"}]
+b7:["$","ul",null,{"className":"x:[:is(ol,ul)_&]:my-[.75em] x:not-first:mt-[1.25em] x:list-disc x:ms-[1.5em]","children":["\n",["$","li",null,{"className":"x:my-[.5em]","children":["NixOS modullari: barcha foydalanuvchilar tomonidan talab qilinadigan va tizimning asosi bo’lgan dastur va konfiguratsiyalarnigina o’rnating.","\n",["$","ul",null,{"className":"x:[:is(ol,ul)_&]:my-[.75em] x:not-first:mt-[1.25em] x:list-disc x:ms-[1.5em]","children":["\n",["$","li",null,{"className":"x:my-[.5em]","children":"Masalan, ma’lum bir dasturni root foydalanuvchiga aylanganingizda ham ishlayverishini istasangiz, yoki bitta konfiguratsiyani tizim-aro qo’llashni xohlasangiz, uni siz NixOS Modullari bilan o’rnatishingiz kerak."}],"\n"]}],"\n"]}],"\n",["$","li",null,{"className":"x:my-[.5em]","children":"Home Manager: buni esa boshqa har qanday konfiguratsiya va dasturlar uchun ishlating."}],"\n"]}]
+b8:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Bu usulni afzalliklari shuki:"}]
+b9:["$","ol",null,{"className":"x:[:is(ol,ul)_&]:my-[.75em] x:not-first:mt-[1.25em] x:list-decimal x:ms-6","children":["\n",["$","li",null,{"className":"x:my-[.5em]","children":["\n",["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Tizim darajasida o’rnatilgan dastur va orqa-fon servislari ko’pincha root huquqlari bilan ishlaydi. Keraksiz dasturlarning tizim darajasida o’rnatilishini cheklash esa, tizim xavfsizligini mustahkamlaydi."}],"\n"]}],"\n",["$","li",null,{"className":"x:my-[.5em]","children":["\n",["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Home Managerda yozilgan ko’plab konfiguratsiyalar NixOS, macOS va boshqa Linux distributivlari uchun umimiy hisoblanadi. Dasturlarni o’rnatish va tizimni sozlash uchun Home Managerni tanlash, konfiguratsiyaning moslashuvchan bo’lishini ta’minlaydi."}],"\n"]}],"\n",["$","li",null,{"className":"x:my-[.5em]","children":["\n",["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Ko’p-foydanaluvchili konfiguratsiya: Home Manager bilan o’rnatilgan dastur va konfiguratsiyalar turli foydalanuvchi muhitlarini izolyatsiya qila oladi. Bu esa foydalanuvchilar orasidagi konfiguratsiya vs dastur versiyalaridagi buzilishlarning oldini oladi."}],"\n"]}],"\n"]}]
+ba:["$","h2",null,{"id":"home-manager-orqali-ornatilgan-dasturlardan-root-sifatida-foydalanish","className":"x:tracking-tight x:text-slate-900 x:dark:text-slate-100 x:font-semibold x:target:animate-[fade-in_1.5s] x:mt-10 x:border-b x:pb-1 x:text-3xl nextra-border","children":["Home Manager orqali o‘rnatilgan dasturlardan root sifatida foydalanish",["$","$Le5",null,{"id":"home-manager-orqali-ornatilgan-dasturlardan-root-sifatida-foydalanish"}]]}]
+bb:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":"Agar siz home.nix orqali o‘rnatilgan kubectl kabi dasturdan root sifatida foydalanmoqchi bo‘lsangiz, quyidagi muammo yuzaga keladi:"}]
+bc:["$","div",null,{"data-pagefind-ignore":"all","className":"nextra-code x:relative x:not-first:mt-[1.25em]","children":["$undefined",["$","pre",null,{"className":"x:group x:focus-visible:nextra-focus x:overflow-x-auto x:subpixel-antialiased x:text-[.9em] x:bg-white x:dark:bg-black x:py-4 x:ring-1 x:ring-inset x:ring-gray-300 x:dark:ring-neutral-700 x:contrast-more:ring-gray-900 x:contrast-more:dark:ring-gray-50 x:contrast-more:contrast-150 x:rounded-md not-prose","tabIndex":"0","children":[["$","div",null,{"className":"x:group-hover:opacity-100 x:group-focus:opacity-100 x:opacity-0 x:transition x:focus-within:opacity-100 x:flex x:gap-1 x:absolute x:right-4 x:top-2","children":[["$","$L9",null,{"children":["$","svg",null,{"viewBox":"0 0 24 24","fill":"currentColor","height":"1em","children":["$","path",null,{"d":"M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"}]}]}],false]}],["$","code",null,{"className":"nextra-code","dir":"ltr","children":[["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"# 1. kubtectl mavjud"}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"›"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" kubectl"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" |"}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":" head"}]]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"kubectl"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" Kubernetes"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" klaster"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" boshqaruvchi"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" utilita."}]]}],"\n",["$","span",null,{"children":" "}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"Batafsil:"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" https://kubernetes.io/docs/reference/kubectl/"}]]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":"......"}]}],"\n",["$","span",null,{"children":" "}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"# 2. `root` foydalanuvchiga o‘tish"}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"›"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" sudo"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" su"}]]}],"\n",["$","span",null,{"children":" "}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"# `kubectl` buyrug‘ endi topilmaydi"}]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":">"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" kubectl"}]]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"Error:"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" ..."}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" executable"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" was"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" not"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" found"}]]}],"\n",["$","span",null,{"children":" "}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  ×"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" External"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" command"}],"$Le6"]}],"\n","$Le7","\n","$Le8","\n","$Le9","\n","$Lea","\n","$Leb","\n","$Lec","\n","$Led","\n","$Lee","\n","$Lef"]}]]}]]}]
+bd:["$","p",null,{"className":"x:not-first:mt-[1.25em] x:leading-7","children":["Yechim: ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"sudo"}]," orqali buyrug‘ni bevosita joriy foydalanuvchi nomidan ",["$","code",null,{"className":"nextra-code","dir":"ltr","children":"root"}]," sifatida ishga tushiring:"]}]
+be:["$","div",null,{"data-pagefind-ignore":"all","className":"nextra-code x:relative x:not-first:mt-[1.25em]","children":["$undefined",["$","pre",null,{"className":"x:group x:focus-visible:nextra-focus x:overflow-x-auto x:subpixel-antialiased x:text-[.9em] x:bg-white x:dark:bg-black x:py-4 x:ring-1 x:ring-inset x:ring-gray-300 x:dark:ring-neutral-700 x:contrast-more:ring-gray-900 x:contrast-more:dark:ring-gray-50 x:contrast-more:contrast-150 x:rounded-md not-prose","tabIndex":"0","children":[["$","div",null,{"className":"x:group-hover:opacity-100 x:group-focus:opacity-100 x:opacity-0 x:transition x:focus-within:opacity-100 x:flex x:gap-1 x:absolute x:right-4 x:top-2","children":[["$","$L9",null,{"children":["$","svg",null,{"viewBox":"0 0 24 24","fill":"currentColor","height":"1em","children":["$","path",null,{"d":"M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"}]}]}],false]}],["$","code",null,{"className":"nextra-code","dir":"ltr","children":[["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"›"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" sudo"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" kubectl"}]]}],"\n",["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"kubectl"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" controls"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" the"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" Kubernetes"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" cluster"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" manager."}]]}],"\n",["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":"..."}]}]]}]]}]]}]
+c1:null
+c2:["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}]
+c3:["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"nixpkgs"}]
+c4:["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}]
+c5:["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"follows"}]
+c6:["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}]
+c7:["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"nixpkgs\""}]
+c8:["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]
+c9:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    };"}]}]
+ca:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+cb:["$","span",null,{"children":" "}]
+cc:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  outputs"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" inputs@{ nixpkgs"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":","}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" home-manager"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":","}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ... "}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"}: {"}]]}]
+cd:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"    nixosConfigurations"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+ce:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"      # ESLATMA iltimos hostname `my-nixos` ni o'zingiznikiga moslang"}]}]
+cf:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"      my-nixos"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":" nixpkgs"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"lib"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"nixosSystem"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" {"}]]}]
+d0:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"        system"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" \"x86_64-linux\""}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+d1:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"        modules"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" ["}]]}]
+d2:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"          ./configuration.nix"}]}]
+d3:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"          "}]}]
+d4:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"          # home manager ni nixos moduli qilib yuklang"}]}]
+d5:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"          # shunda home manager sozlamalari avtomatik tarzda qo'shilib ketadi `nixos-rebuild` ishga tushurilganda"}]}]
+d6:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"          home-manager"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"nixosModules"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#E36209","--shiki-dark":"#FFAB70"},"children":"home-manager"}]]}]
+d7:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"          {"}]}]
+d8:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"            home-manager"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"useGlobalPkgs"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+d9:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"            home-manager"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"useUserPackages"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" true"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+da:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"            "}]}]
+db:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"            # ESLATMA ryan ni o'zingizni foydalanuvchi otingizga almashtiring"}]}]
+dc:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"            home-manager"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"users"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"."}],["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"ryan"}],["$","span",null,{"style":{"--shiki-light":"#D73A49","--shiki-dark":"#F97583"},"children":" ="}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" import"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" ./home.nix"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":";"}]]}]
+dd:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"            "}]}]
+de:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":"            # Qo'shimchasiga home-manager.extraSpecialArgs ni home.nix ga argument oshirish uchun ishlatsangiz bo'ladi"}]}]
+df:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"          }"}]}]
+e0:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"        ];"}]}]
+e1:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"      };"}]}]
+e2:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"    };"}]}]
+e3:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"  };"}]}]
+e4:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"}"}]}]
+e6:["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" failed"}]
+e7:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"   ╭─[entry"}],["$","span",null,{"style":{"--shiki-light":"#6A737D","--shiki-dark":"#6A737D"},"children":" #1:1:1]"}]]}]
+e8:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":" 1"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" │"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" kubectl"}]]}]
+e9:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"   ·"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" ───┬───"}]]}]
+ea:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"   ·"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"    ╰──"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" executable"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" was"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" not"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" found"}]]}]
+eb:["$","span",null,{"children":["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"   ╰────"}]}]
+ec:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"  help:"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" No"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" such"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" file"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" or"}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":" directory"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":" (os "}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"error"}],["$","span",null,{"style":{"--shiki-light":"#005CC5","--shiki-dark":"#79B8FF"},"children":" 2"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":")"}]]}]
+ed:["$","span",null,{"children":" "}]
+ee:["$","span",null,{"children":" "}]
+ef:["$","span",null,{"children":[["$","span",null,{"style":{"--shiki-light":"#6F42C1","--shiki-dark":"#B392F0"},"children":"/home/ryan/nix-config"}],["$","span",null,{"style":{"--shiki-light":"#24292E","--shiki-dark":"#E1E4E8"},"children":"> "}],["$","span",null,{"style":{"--shiki-light":"#032F62","--shiki-dark":"#9ECBFF"},"children":"exit"}]]}]

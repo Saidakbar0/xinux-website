@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://saidakbar0.github.io/xinux-website/
+
+# Sitemaps
+Sitemap: https://saidakbar0.github.io/xinux-website/sitemap.xml
