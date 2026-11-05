@@ -1,0 +1,73 @@
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import { Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
+import { Search } from "nextra/components";
+import { getPageMap } from "nextra/page-map";
+import "nextra-theme-docs/style.css";
+import "../styles.css";
+import Logo from "../components/Logo";
+
+const OG_IMAGE_URL = "https://xinux.uz/og-image.jpg";
+const BASE_PATH = process.env.BASE_PATH || "";
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://xinux.uz"),
+  title: {
+    template: "%s – Xinux",
+    default: "Xinux",
+  },
+  description: "NixOS va Xinux haqida yozilgan yordamchi ma'lumot va qo'llanmalar.",
+  openGraph: {
+    images: [OG_IMAGE_URL],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [OG_IMAGE_URL],
+  },
+};
+
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const pageMap = await getPageMap();
+
+  return (
+    <html lang="uz" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
+        <link rel="apple-touch-icon" sizes="180x180" href={`${BASE_PATH}/apple-touch-icon.png`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`${BASE_PATH}/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`${BASE_PATH}/favicon-16x16.png`} />
+        <link rel="manifest" href={`${BASE_PATH}/site.webmanifest`} />
+      </head>
+      <body className="folderAsHeader cbs">
+        <Layout
+          navbar={
+            <Navbar logo={<Logo />}>
+              <ThemeSwitch />
+            </Navbar>
+          }
+          pageMap={pageMap}
+          docsRepositoryBase="https://git.oss.uzinfocom.uz/xinux/website/src/branch/main/"
+          sidebar={{ defaultMenuCollapseLevel: 1, toggleButton: true }}
+          toc={{ title: "Ushbu sahifada", backToTop: "Yuqoriga qaytish" }}
+          editLink="Ushbu sahifani Forgejoda tahrirlash"
+          search={<Search placeholder="Qidiruv..." loading='Yuklanmoqda...' emptyResult='Qidiruv natijalari topilmadi.' />}
+          feedback={{ content: null }}
+          copyPageButton={false}
+          footer={null}
+          themeSwitch={{
+            dark: 'Qora',
+            light: 'Oq',
+            system: 'Tizim'
+          }}
+        >
+          {children}
+        </Layout>
+      </body>
+    </html>
+  );
+}

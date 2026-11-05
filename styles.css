@@ -1,0 +1,733 @@
+:root {
+  --nextra-content-width: 84rem;
+  --brand-primary-base: #415e9a;
+  --brand-primary-opacity: #415e9a80;
+
+  --brand-secondary-low: #463ecf;
+  --brand-secondary-base: #699ad7;
+  --brand-secondary-opacity: #699ad780;
+
+  --neutral-dark-base: #151515;
+  --neutral-dark-medium: #252525;
+  --neutral-dark-high: #343434;
+  --neutral-dark-opacity: #ffffff16;
+
+  --neutral-light-base: #999999;
+  --neutral-light-medium: #c2c2c2;
+  --neutral-light-high: #f5f5f5;
+  --neutral-light-opacity: #00000016;
+
+  --xinux-surface: #f4f8fc;
+  --xinux-border: #d4dfeb;
+  --xinux-brand: #415e9a;
+  --xinux-brand-soft: #eaf2fb;
+  --xinux-window: #ffffff;
+  --xinux-window-bar: #edf3fa;
+  --xinux-window-shadow: rgb(30 55 88 / 10%);
+}
+
+html[class~="dark"] {
+  --color-accent: var(--brand-primary-base);
+  --color-accent-opacity: var(--brand-primary-opacity);
+  --color-highlight: var(--brand-secondary-base);
+  --nextra-primary-hue: 72;
+  --nextra-bg: 17, 26, 40;
+  --xinux-surface: #111a28;
+  --xinux-border: #34465c;
+  --xinux-brand: #9dbbe9;
+  --xinux-brand-soft: #1d3049;
+  --xinux-window: #151f2d;
+  --xinux-window-bar: #1c2a3b;
+  --xinux-window-shadow: rgb(0 0 0 / 28%);
+}
+
+html[class~="light"] {
+  --color-accent: var(--brand-primary-base);
+  --color-accent-opacity: var(--brand-primary-opacity);
+  --color-highlight: var(--brand-secondary-base);
+  --nextra-primary-hue: 210;
+  --nextra-bg: 244, 248, 252;
+}
+
+/* General
+  ------------------------ */
+html,
+body,
+kbd {
+  font-family: "Inter", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  -webkit-font-smoothing: "antialiased";
+}
+
+html {
+  font-size: 17px;
+}
+
+a:focus-visible,
+input:focus-visible,
+button:focus-visible {
+  box-shadow: none !important;
+  outline: 2px solid var(--color-highlight);
+  outline-offset: -2px;
+}
+
+header nav {
+  height: 7rem;
+  box-sizing: border-box;
+  padding: 0 2.5rem;
+}
+
+header nav a:not([aria-label]) {
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
+  background-color: rgb(65 94 154 / 5%);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+header nav a:not([aria-label]):hover,
+header nav a[aria-current="page"]:not([aria-label]) {
+  background-color: rgb(105 154 215 / 22%);
+}
+
+header nav button {
+  border-radius: 999px;
+  background-color: rgb(65 94 154 / 5%);
+}
+
+header nav .nextra-hamburger {
+  display: grid;
+  place-items: center;
+  flex: 0 0 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+
+.nextra-search input {
+  border-radius: 999px !important;
+}
+
+.nextra-card,
+.nextra-cards a {
+  border-radius: 14px !important;
+}
+
+html[class~="dark"] header nav a:not([aria-label]),
+html[class~="dark"] header nav button {
+  background-color: rgb(255 255 255 / 7%);
+}
+
+.nextra-sidebar-container {
+  box-sizing: border-box;
+  padding-left: 1rem;
+}
+
+.nextra-toc {
+  padding-right: 1rem;
+}
+
+@media (max-width: 640px) {
+  header {
+    padding: 0;
+  }
+
+  header nav {
+    padding: 0 2rem;
+  }
+
+  .nextra-sidebar-container {
+    padding-top: 0;
+  }
+}
+
+.nextra-breadcrumb {
+  display: none !important;
+}
+
+/* General colors
+  ------------------------ */
+
+/* Link
+  ------------------------ */
+html[class~="dark"] .nextra-content p a,
+html[class~="light"] .nextra-content p a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.01em;
+  transition: text-decoration-color 125ms ease-out;
+}
+
+html[class~="dark"] .nextra-content p a,
+html[class~="light"] .nextra-content p a {
+  text-decoration-color: var(--color-accent-opacity);
+}
+
+html[class~="dark"] .nextra-content p a:hover,
+html[class~="light"] .nextra-content p a:hover {
+  text-decoration-color: var(--color-accent);
+}
+
+/* Header Navbar
+  ------------------------ */
+header {
+  border-top: 0;
+  border-bottom: 1px solid rgb(65 94 154 / 18%);
+  border-radius: 0 0 1rem 1rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+header::before {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  left: 1rem;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--brand-secondary-base);
+  content: "";
+}
+
+/*html[class~="light"] header {
+  background-color: rgba(245, 245, 245, 0.6) !important;
+}
+
+html[class~="dark"] header {
+  background-color: rgba(21, 21, 21, 0.6) !important;
+}*/
+
+.nextra-navbar-blur {
+  border-radius: 0 0 1rem 1rem;
+  background: rgb(244 248 252 / 92%) !important;
+  --tw-backdrop-blur: blur(8px) !important;
+  --tw-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-bottom: 0 !important;
+}
+
+html[class~="dark"] header {
+  border-bottom-color: rgb(157 187 233 / 22%);
+}
+
+html[class~="dark"] .nextra-navbar-blur {
+  background: rgb(17 26 40 / 92%) !important;
+}
+
+.nx-max-w-\[90rem\] {
+  max-width: 90rem !important;
+}
+
+/* Search Input
+  ------------------------ */
+html[class~="dark"] .nextra-search input,
+html[class~="dark"] .nextra-search input:focus {
+  background-color: #0d0d0d;
+  border-color: #252525ff;
+}
+
+html[class~="dark"] .nextra-search input::placeholder {
+  color: #e5e5e560;
+}
+
+/* Sidebar
+  ------------------------ */
+.nextra-sidebar-container-menu {
+  border: none;
+}
+
+.nextra-sidebar-container > div {
+  margin-top: 10px;
+  padding-top: 0;
+}
+
+.nextra-toc-meta,
+.nextra-sidebar-container-menu {
+  box-shadow: none !important;
+}
+
+.nextra-sidebar-container .nextra-scrollbar + div {
+  border-width: 0;
+  height: 4rem;
+}
+
+.nextra-sidebar-footer {
+  background: transparent !important;
+}
+
+.nextra-toc ul li a {
+  transition: color 125ms ease-out;
+  font-weight: 500;
+}
+
+html[class~="light"] .nextra-toc ul li a {
+  color: var(--neutral-dark-high);
+}
+
+html[class~="light"] .nextra-toc ul li a:not(.nx-text-primary-600):hover {
+  color: var(--neutral-dark-base);
+}
+
+/** active */
+html[class~="light"] .nextra-toc a.nx-text-primary-600 {
+  color: var(--color-highlight);
+}
+
+html[class~="dark"] .nextra-toc ul li a {
+  color: var(--neutral-light-base);
+}
+
+html[class~="dark"] .nextra-toc ul li a:not(.nx-text-primary-600):hover {
+  color: var(--neutral-light-medium);
+}
+
+/** active */
+html[class~="dark"] .nextra-toc a.nx-text-primary-600 {
+  color: var(--neutral-light-high);
+}
+
+html[class~="light"] .nextra-sidebar-separator {
+  color: var(--neutral-dark-base);
+}
+
+html[class~="dark"] .nextra-sidebar-separator {
+  color: var(--neutral-light-high);
+}
+
+html[class~="light"] .nextra-sidebar-container ul li a {
+  color: var(--neutral-dark-high);
+  font-weight: 500;
+  transition: none;
+}
+
+html[class~="light"] .nextra-sidebar-container ul li a:hover,
+html[class~="light"] .nextra-sidebar-container ul li.active > a:hover {
+  color: var(--neutral-dark-base);
+  background-color: var(--neutral-light-opacity);
+}
+
+html[class~="light"] .folderAsHeader .nextra-sidebar-container ul li.active > a,
+html[class~="light"] .nextra-toc ul li a[aria-selected="true"] {
+  color: var(--neutral-dark-high);
+  background: var(--neutral-light-opacity);
+}
+
+html[class~="dark"] .nextra-sidebar-container ul li a {
+  color: var(--neutral-light-base);
+  font-weight: 500;
+  transition: none;
+}
+
+html[class~="dark"] .nextra-sidebar-container ul li a:hover,
+html[class~="dark"] .nextra-sidebar-container ul li.active > a:hover {
+  background-color: var(--neutral-dark-opacity);
+}
+
+html[class~="dark"] .folderAsHeader .nextra-sidebar-container ul li.active > a,
+html[class~="dark"] .nextra-toc ul li a[aria-selected="true"] {
+  color: var(--neutral-light-high);
+  background: transparent;
+}
+
+html[class~="dark"] .nextra-sidebar-container ul li.active > a:hover,
+html[class~="dark"] .nextra-toc ul li a[aria-selected="true"]:hover {
+  color: var(--neutral-light-high);
+  background: var(--neutral-dark-opacity);
+}
+
+html[class~="dark"] .nx-text-primary-600 {
+  color: var(--neutral-light-high);
+}
+
+html[class~="light"] .nx-text-primary-600 {
+  color: var(--neutral-dark-high);
+}
+
+@media (max-width: 640px) {
+  html[class~="dark"] .folderAsHeader .nextra-sidebar-container ul li.active > a {
+    color: currentColor;
+    text-align: left;
+  }
+
+  .folderAsHeader .nextra-sidebar-container ul ul li a {
+    justify-content: normal;
+  }
+}
+
+/* arrow dropdown */
+.folderAsHeader .nextra-sidebar-container a svg {
+  opacity: 0;
+}
+
+.folderAsHeader .nextra-sidebar-container a:hover svg {
+  opacity: 1;
+}
+
+svg:hover {
+  background: transparent !important;
+}
+
+.folderAsHeader .nextra-sidebar-container ul > li li a,
+.folderAsHeader .nextra-sidebar-container ul > li li a:hover {
+  line-height: 1.3;
+  font-size: 14px;
+}
+
+.wip {
+  position: relative;
+  display: flex;
+  opacity: 0.5;
+}
+
+.wip:after {
+  content: "WIP";
+  border-radius: 2px;
+  padding: 2px;
+  font-size: 9px;
+  line-height: 13px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -35%);
+  opacity: 0.6;
+}
+
+/* Content
+  ------------------------ */
+
+main div.mt-12 {
+  display: none;
+}
+
+.nextra-breadcrumb {
+  pointer-events: none;
+  display: none;
+}
+
+.nextra-navigation-links {
+  margin-top: 6rem;
+  padding-bottom: 4rem;
+  border: none;
+}
+
+html[class~="dark"] article p a,
+html[class~="dark"] article li a,
+html[class~="light"] article p a,
+html[class~="light"] article li a {
+  color: var(--color-accent) !important;
+}
+
+/* Keyboard Shortcut
+  ------------------------ */
+p kbd {
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 6px;
+  padding-bottom: 7px;
+  line-height: 14px;
+  font-weight: bold;
+}
+
+html[class~="light"] p kbd {
+  color: rgb(75, 85, 99);
+  background: rgb(75 85 99 / 12%);
+  box-shadow: rgb(75 85 99 / 24%) 0px -2px 0px inset;
+}
+
+html[class~="dark"] p kbd {
+  background: rgb(42 42 42);
+  box-shadow: rgb(255 255 255 / 12%) 0px -2px 0px inset;
+  color: #c5c5c5;
+}
+
+/* Callout
+  ------------------------ */
+
+.nextra-callout {
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid transparent !important;
+  border-left-width: 4px !important;
+  border-radius: 12px !important;
+  padding: 1rem 1.15rem !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  box-shadow: 0 4px 14px rgb(25 49 78 / 6%);
+}
+
+.nextra-callout .pr-2 {
+  padding-right: 1rem;
+}
+
+html[class~="light"] .nextra-callout,
+html[class~="dark"] .nextra-callout {
+  color: var(--callout-ink) !important;
+  background-color: var(--callout-surface) !important;
+  border-color: var(--callout-edge) !important;
+}
+
+html[class~="light"] .nextra-callout {
+  --callout-ink: #27456b;
+  --callout-surface: #edf5ff;
+  --callout-edge: #79a8df;
+}
+
+html[class~="dark"] .nextra-callout {
+  --callout-ink: #d7e8ff;
+  --callout-surface: #1a2a3e;
+  --callout-edge: #5d8fc8;
+}
+
+html[class~="light"] .nextra-callout[class*="bg-green-100"] {
+  --callout-ink: #24543a;
+  --callout-surface: #eaf7ef;
+  --callout-edge: #62ad7b;
+}
+
+html[class~="dark"] .nextra-callout[class*="bg-green-100"] {
+  --callout-ink: #d0f0d9;
+  --callout-surface: #193329;
+  --callout-edge: #55a875;
+}
+
+html[class~="light"] .nextra-callout[class*="bg-yellow-100"],
+html[class~="light"] .nextra-callout[class*="bg-yellow-50"],
+html[class~="light"] .nextra-callout[class*="bg-orange-100"],
+html[class~="light"] .nextra-callout[class*="bg-orange-50"] {
+  --callout-ink: #674718;
+  --callout-surface: #fff5df;
+  --callout-edge: #d8a43c;
+}
+
+html[class~="dark"] .nextra-callout[class*="bg-yellow-100"],
+html[class~="dark"] .nextra-callout[class*="bg-yellow-50"],
+html[class~="dark"] .nextra-callout[class*="bg-orange-100"],
+html[class~="dark"] .nextra-callout[class*="bg-orange-50"] {
+  --callout-ink: #f5dfb1;
+  --callout-surface: #392f1c;
+  --callout-edge: #c89432;
+}
+
+html[class~="light"] .nextra-callout[class*="bg-blue-50"] {
+  --callout-ink: #27456b;
+  --callout-surface: #edf5ff;
+  --callout-edge: #79a8df;
+}
+
+html[class~="dark"] .nextra-callout[class*="bg-blue-50"] {
+  --callout-ink: #d7e8ff;
+  --callout-surface: #1a2a3e;
+  --callout-edge: #5d8fc8;
+}
+
+html[class~="light"] .nextra-callout[class*="bg-red-50"],
+html[class~="light"] .nextra-callout[class*="bg-red-100"] {
+  --callout-ink: #702f3c;
+  --callout-surface: #fff0f1;
+  --callout-edge: #d87583;
+}
+
+html[class~="dark"] .nextra-callout[class*="bg-red-50"],
+html[class~="dark"] .nextra-callout[class*="bg-red-100"] {
+  --callout-ink: #f4d5da;
+  --callout-surface: #3a2229;
+  --callout-edge: #c76778;
+}
+
+.cbs article {
+  position: relative;
+  border: 1px solid var(--xinux-border);
+  border-radius: 18px;
+  background: var(--xinux-window);
+  box-shadow: 0 18px 48px var(--xinux-window-shadow);
+}
+
+.cbs article::before {
+  position: absolute;
+  top: 1.55rem;
+  left: 1.5rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #e97872;
+  box-shadow: 1.15rem 0 #efbd55, 2.3rem 0 #67bd82;
+  content: "";
+}
+
+.cbs article::after {
+  position: absolute;
+  top: 1.2rem;
+  right: 4rem;
+  left: 5.2rem;
+  overflow: hidden;
+  color: var(--xinux-brand);
+  content: "Xinux  /  NixOS hujjatlari";
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+html[class~="dark"] .cbs article {
+  color: #e4edf8;
+}
+
+/* Headings
+  ------------------------ */
+
+.cbs article {
+  padding-top: 4rem !important;
+}
+
+.cbs article h1 {
+  font-size: 3.5rem;
+  margin-top: 0;
+  line-height: 100%;
+  letter-spacing: -0.05em;
+  font-weight: bold;
+}
+
+@media (max-width: 640px) {
+  .cbs article h1 {
+    font-size: 3rem;
+  }
+}
+
+.cbs article h2 {
+  border: none;
+  font-size: 2rem;
+  line-height: 120%;
+  letter-spacing: -0.025em;
+  font-weight: bold;
+}
+
+.cbs article h2 .nx-absolute,
+.cbs article h3 .nx-absolute {
+  margin-top: -7rem;
+}
+
+.cbs article h1:first-of-type {
+  margin-top: -0.16em;
+}
+
+.cbs article h2 {
+  margin-top: 2em;
+}
+
+.cbs article h2 + p:not(:first-child),
+.cbs article h3 + p:not(:first-child) {
+  margin-top: 0.6rem;
+}
+
+.cbs article h3 {
+  /*margin-top: 1.5em;*/
+}
+
+.cbs article img {
+  border-radius: 0.75rem;
+}
+
+.cbs article .subheading-anchor {
+  margin-top: -110px;
+}
+
+/* Edit Link
+  ------------------------ */
+a[href*="github.com"][target="_blank"] {
+  display: inline-flex !important;
+  align-items: start;
+  gap: 0.5rem;
+}
+
+/* Theme Switch
+  ------------------------ */
+/* ThemeSwitch moved to navbar: hide it from left sidebar */
+.nextra-sidebar-footer button[title="Change theme"] {
+  display: none;
+}
+
+/* Hide the mobile nav footer entirely */
+.nextra-mobile-nav .nextra-sidebar-footer {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .nextra-mobile-nav {
+    position: fixed !important;
+    inset: auto 1rem auto auto !important;
+    top: calc(var(--nextra-navbar-height) + 0.5rem) !important;
+    z-index: 25 !important;
+    width: min(27rem, calc(100vw - 2rem)) !important;
+    height: auto !important;
+    max-height: calc(100dvh - var(--nextra-navbar-height) - 1rem) !important;
+    min-height: 0 !important;
+    padding: 1rem !important;
+    overflow-y: auto;
+    border: 1px solid var(--xinux-border);
+    border-radius: 1.25rem;
+    background: var(--xinux-surface) !important;
+    box-shadow: 0 1rem 2.5rem rgb(20 39 67 / 18%);
+    transform: translate3d(0, calc(-100% - 1rem), 0) !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 180ms ease;
+  }
+
+  .nextra-mobile-nav[class*="translate3d(0,0,0)"] {
+    transform: translate3d(0, 0, 0) !important;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nextra-mobile-nav a,
+  .nextra-mobile-nav button,
+  .nextra-mobile-nav input {
+    border-radius: 999px;
+  }
+
+  .nextra-mobile-nav li a,
+  .nextra-mobile-nav li button {
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .nextra-mobile-nav li a:hover,
+  .nextra-mobile-nav li button:hover {
+    background-color: var(--xinux-brand-soft);
+  }
+}
+
+/* Code Snippet
+  ------------------------ */
+
+html[class~="light"] article pre {
+  background-color: var(--neutral-light-high) !important;
+  border: none;
+}
+
+html[class~="dark"] article pre {
+  background-color: var(--neutral-dark-medium) !important;
+  border: none;
+}
+
+/* Search results
+  ------------------------ */
+
+html[class~="light"] .nextra-search-results {
+  color: var(--neutral-dark-high);
+}
+
+html[class~="light"] .nextra-search-results a,
+html[class~="light"] .nextra-search-results li,
+html[class~="light"] .nextra-search-results p,
+html[class~="light"] .nextra-search-results span,
+html[class~="light"] .nextra-search-results mark {
+  color: var(--neutral-dark-high) !important;
+}
+
+html[class~="light"] .nextra-search-results a:hover,
+html[class~="light"] .nextra-search-results a[aria-selected="true"] {
+  color: var(--neutral-dark-base) !important;
+}

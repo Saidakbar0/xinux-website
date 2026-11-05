@@ -1,0 +1,32 @@
+export default {
+  index: "So'zboshi",
+  "-- Introduction": {
+    type: "separator",
+    title: "Boshlang'ich",
+  },
+  introduction: "Tanishuv",
+  "advantages-and-disadvantages": "Afzalliklari va kamchiliklari",
+  installation: "O'rnatish",
+  "-- Nix Language": {
+    type: "separator",
+    title: "Nix tili",
+  },
+  "the-nix-language": "Asoslar",
+  "-- NixOS with Flakes": {
+    type: "separator",
+    title: "Flakelar bilan NixOS",
+  },
+  "get-started-with-nixos": "NixOS bilan ishlashni boshlash",
+  "introduction-to-flakes": "Fleyklar bilan ishlashni boshlash",
+  "nixos-with-flakes-enabled": "NixOS tizimida Fleyklarni yoqish",
+  "nixos-flake-configuration-explained": "flake.nix konfiguratsiya tushunchalari",
+  "nixos-flake-and-module-system": "Fleyklar va Nixpkgs modullar tizimining kombinatsiya imkoniyatlari",
+  "start-using-home-manager": "Home Manager bilan ishlashni boshlash",  
+
+  "-- Extra": {
+    type: "separator",
+    title: "Qoʻshimcha",
+  },
+  "about-cve-copy-fail": "Linux kernelida „Copy Fail“",
+  }
+

@@ -1,0 +1,321 @@
+.gallery {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.featured {
+  position: relative;
+  margin: 0;
+  padding: 0 0 2.8rem 2.8rem;
+}
+
+.featured::before {
+  position: absolute;
+  top: 1.2rem;
+  right: 0;
+  bottom: 2.8rem;
+  left: 1.2rem;
+  border: 1px solid var(--home-brand, #415e9a);
+  border-radius: 18px;
+  content: "";
+  pointer-events: none;
+}
+
+.imageButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  background: #101725;
+  cursor: zoom-in;
+}
+
+.imageButton img {
+  position: relative !important;
+  display: block;
+  width: 100%;
+  height: auto !important;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 220ms ease;
+}
+
+.imageButton:hover img,
+.imageButton:focus-visible img {
+  transform: scale(1.025);
+}
+
+.imageButton:focus-visible,
+.closeButton:focus-visible,
+.navButton:focus-visible {
+  outline: 3px solid #8cc9ed;
+  outline-offset: 3px;
+}
+
+.featured > figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 2.8rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  box-sizing: border-box;
+  padding: 0.8rem 1rem;
+  border-bottom: 3px solid var(--home-sky, #699ad7);
+  color: var(--home-muted, #596b82);
+  font-size: 0.72rem;
+}
+
+.featured > figcaption span:first-child {
+  color: var(--home-brand, #415e9a);
+  font-weight: 700;
+}
+
+.zoomHint {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 999px;
+  background: rgb(15 24 38 / 72%);
+  color: #fff;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.imageButton:hover .zoomHint,
+.imageButton:focus-visible .zoomHint {
+  opacity: 1;
+}
+
+.thumbnails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding-left: 2.8rem;
+}
+
+.thumbnail {
+  min-width: 0;
+  margin: 0;
+  padding: 0.35rem;
+  overflow: hidden;
+  border: 1px solid var(--home-line, #d4dfeb);
+  border-radius: 12px;
+  background: var(--home-soft, #eaf2fb);
+}
+
+.thumbnail .imageButton {
+  border-radius: 8px;
+}
+
+.thumbnail figcaption {
+  padding: 0.5rem 0.35rem 0.2rem;
+  color: var(--home-muted, #596b82);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.lightbox {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgb(8 14 24 / 88%);
+  backdrop-filter: blur(8px);
+  animation: viewerFadeIn 160ms ease-out both;
+}
+
+.viewer {
+  position: relative;
+  width: min(100%, 76rem);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 16px;
+  background: #111a28;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
+  animation: viewerRiseIn 200ms ease-out both;
+}
+
+.viewerToolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 2.5rem;
+  align-items: center;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.8rem 0.5rem 1.1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
+  color: #e8f0fb;
+  font-size: 0.82rem;
+}
+
+.viewerToolbar p {
+  margin: 0;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewerToolbar > span {
+  color: #adbed4;
+  font-variant-numeric: tabular-nums;
+}
+
+.closeButton,
+.navButton {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 16%);
+  background: rgb(255 255 255 / 8%);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.closeButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+
+.closeButton span {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.navButton span {
+  margin-top: -0.15rem;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.closeButton:hover,
+.navButton:hover {
+  background: rgb(255 255 255 / 20%);
+}
+
+.previousButton {
+  left: 1rem;
+}
+
+.nextButton {
+  right: 1rem;
+}
+
+.viewerImage {
+  position: relative;
+  width: 100%;
+  height: min(78vh, 52rem);
+  background: #080d15;
+}
+
+.viewerImage img {
+  object-fit: contain;
+}
+
+@keyframes viewerFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes viewerRiseIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 640px) {
+  .featured {
+    padding: 0 0 2.5rem 1.2rem;
+  }
+
+  .featured::before {
+    top: 0.7rem;
+    bottom: 2.5rem;
+    left: 0.7rem;
+  }
+
+  .featured > figcaption {
+    left: 1.2rem;
+    font-size: 0.65rem;
+  }
+
+  .thumbnails {
+    gap: 0.55rem;
+    padding-left: 1.2rem;
+  }
+
+  .thumbnail figcaption {
+    font-size: 0.65rem;
+  }
+
+  .lightbox {
+    padding: 0.6rem;
+  }
+
+  .viewer {
+    border-radius: 12px;
+  }
+
+  .viewerToolbar {
+    grid-template-columns: minmax(0, 1fr) auto 2.25rem;
+    gap: 0.5rem;
+    min-height: 3.1rem;
+    padding: 0.4rem 0.55rem 0.4rem 0.8rem;
+    font-size: 0.72rem;
+  }
+
+  .closeButton {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .viewerImage {
+    height: min(72vh, 50rem);
+  }
+
+  .navButton {
+    top: auto;
+    bottom: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    transform: none;
+  }
+
+  .previousButton {
+    left: 0.75rem;
+  }
+
+  .nextButton {
+    right: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageButton img,
+  .zoomHint,
+  .closeButton,
+  .navButton,
+  .lightbox,
+  .viewer {
+    animation: none;
+    transition: none;
+  }
+}
